@@ -6,6 +6,10 @@ Comandos:
 
 Para el BackEnd
 
+Vamos a usar azure, para hacer facil las cosas,
+
+docker tambien seria una opcion:
+
 Primero, tener la imagen de docker, esto es como instalarse el sql server express
 
 -	docker pull mcr.microsoft.com/mssql/server:2022-latest
@@ -33,6 +37,12 @@ Ahorra correr sqlserver
 
 Ahora cosas para la DB:
 
+Se necesita usar ya sea SMSS(Studio Managment Sql Server)
+o la extension de sql server de vscode
+y conectarse a la base de datos con la contra y el port de antes
+
+Algunas cosas de sql:
+
 CREATE DATABASE users;
 USE users;
 CREATE TABLE test_table (
@@ -45,6 +55,7 @@ COMMIT;
 SELECT somevalue FROM test_table;
 
 Para dotnet o .NET:
+
 estos son algunos comandos:
 
 -	dotnet new webapi -o backend "Crear el proyecto"
@@ -63,7 +74,6 @@ nodejs tiene un packet manager, osea una appstore para librerias, que se llama n
 - npm create vite@latest my-react-app -- --template react
 - cd my-react-app
 - npm install
-- npm install zustand
 - npm run dev
 
 http://localhost:puerto
