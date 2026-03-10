@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "sqlproj: Build sqlserver-tarea-01",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"/home/nei/Desktop/Databases-01/Tarea-01-BD/backend/database/sqlserver-tarea-01/sqlserver-tarea-01.sqlproj"
+			],
+			"problemMatcher": "$sqlproj-problem-matcher",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Builds the sqlserver-tarea-01 SQL project"
+		}
+	]
+}

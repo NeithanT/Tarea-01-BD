@@ -1,0 +1,19 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver2022
+    ports:
+      - "1433:1433"
+
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong!Pass
+      - MSSQL_PID=Developer
+
+    volumes:
+      - ./init-db.sql:/usr/src/app/initdb.sql:ro
+      - ./setup.sh:/usr/src/app/setup.sh
+
+    command: >
+      bash -c "/opt/mssql/bin/sqlservr & bash /usr/src/app/setup.sh && wait"
+

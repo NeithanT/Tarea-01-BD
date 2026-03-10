@@ -11,11 +11,10 @@ Vamos a usar azure, para hacer facil las cosas,
 docker tambien seria una opcion:
 
 Primero, tener la imagen de docker, esto es como instalarse el sql server express
-
 -	docker pull mcr.microsoft.com/mssql/server:2022-latest
 
 Ejecutar la base de datos sin nada:
--	docker run -e "ACCEPT_EULA=Y"            -p 1433:1433            --name sqlserver2022            -d mcr.microsoft.com/mssql/server:2022-latest
+-	docker run -e "ACCEPT_EULA=Y"     -e "MSSQL_SA_PASSWORD=YourStrong(!)Pass"       -p 1433:1433            --name sqlserver2022            -d mcr.microsoft.com/mssql/server:2022-latest
 
 "Esto crea un contenedor con esa sqlserver, y tiene el nombre de sqlserver2022"
 
