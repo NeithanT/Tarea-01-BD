@@ -1,0 +1,9 @@
+
+backend/API/bin/
+backend/API/obj/
+
+backend/API/*.user
+backend/API/*.suo
+backend/API/*.cache
+
+backend/API/Debug/

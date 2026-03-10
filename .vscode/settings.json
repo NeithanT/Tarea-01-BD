@@ -1,5 +1,6 @@
 {
     "dataworkspace.excludedProjects": [
         "backend/database/sqlserver-tarea-01/sqlserver-tarea-01.sqlproj"
-    ]
+    ],
+    "dotnet.defaultSolution": "API.slnx"
 }
