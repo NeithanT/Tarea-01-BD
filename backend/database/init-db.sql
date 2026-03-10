@@ -1,7 +1,7 @@
-CREATE DATABASE DevDatabase;
+CREATE DATABASE Tarea01;
 GO
 
-USE DevDatabase;
+USE Tarea01;
 GO
 
 CREATE TABLE Empleado (
@@ -10,7 +10,7 @@ CREATE TABLE Empleado (
     Salario money NOT NULL
 );
 
-INSERT dbo.Empleado (Nombre, Salario)
+INSERT INTO Empleado (Nombre, Salario)
 VALUES ('Juan Perez', 200000.00)
 
 GO

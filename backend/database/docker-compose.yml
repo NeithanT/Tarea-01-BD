@@ -7,13 +7,10 @@ services:
 
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=YourStrong!Pass
-      - MSSQL_PID=Developer
+      - MSSQL_SA_PASSWORD=YourStrong1Pass
 
     volumes:
       - ./init-db.sql:/usr/src/app/initdb.sql:ro
       - ./setup.sh:/usr/src/app/setup.sh
 
-    command: >
-      bash -c "/opt/mssql/bin/sqlservr & bash /usr/src/app/setup.sh && wait"
-
+    entrypoint: /bin/bash /usr/src/app/setup.sh
