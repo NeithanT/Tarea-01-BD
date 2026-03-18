@@ -1,12 +1,21 @@
+using Microsoft.Data.SqlClient;
+using Dapper;
+using System.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// 1433
-// DAPPER
-// sql.connection()
+// Permitir peticiones desde el frontend del backend (que no se bloquee la info)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8080")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -15,17 +24,69 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
+// Conecta a SQL server
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Server=localhost,1433;Database=Tarea01;User Id=sa;Password=YourStrong1Pass;TrustServerCertificate=True;";
 
-app.MapGet("/empleado", () =>
+// GET
+app.MapGet("/empleado", async () =>
 {
-    //connection.("SELECT * FROM Empleado;")
-    return "empleado";
+    try
+    {
+        using var connection = new SqlConnection(connectionString);
+        var empleados = await connection.QueryAsync<Empleado>(
+            "SP_ListarEmpleados",
+            commandType: CommandType.StoredProcedure
+        );
+        return Results.Ok(empleados);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error al obtener empleados: {ex.Message}");
+    }
 });
 
-app.MapPost("/empleado", () =>
+// POST
+app.MapPost("/empleado", async (EmpleadoDto empleadoDto) =>
 {
-    return "empleado";
+    try
+    {
+        using var connection = new SqlConnection(connectionString);
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@Nombre", empleadoDto.Nombre);
+        parameters.Add("@Salario", empleadoDto.Salario);
+        parameters.Add("@Resultado", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+        await connection.ExecuteAsync(
+            "SP_InsertarEmpleado",
+            parameters,
+            commandType: CommandType.StoredProcedure
+        );
+
+        var resultado = parameters.Get<int>("@Resultado");
+
+        if (resultado == 0) // codigo 200 de exito
+        {
+            return Results.Ok(new { mensaje = "Empleado insertado exitosamente" });
+        }
+        else if (resultado == 1) // codigo 400 de error por nombre repetido
+        {
+            return Results.BadRequest(new { mensaje = "Nombre de Empleado ya existe." });
+        }
+        else // algun otro valor de error
+        {
+            return Results.Problem("Error al insertar empleado");
+        }
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error al insertar empleado: {ex.Message}");
+    }
 });
 
+// Inicia la aplicación
 app.Run();
+record Empleado(int id, string Nombre, decimal Salario);
+record EmpleadoDto(string Nombre, decimal Salario);
