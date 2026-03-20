@@ -1,4 +1,4 @@
-# comando docker compose up para levantar el SQL server, la API
+# comando docker compose up para levantar el SQL server, la API yel frontend
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -32,3 +32,12 @@ services:
     depends_on:
       sqlserver:
         condition: service_healthy
+
+frontend:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+    depends_on:
+      - api
