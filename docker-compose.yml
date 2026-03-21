@@ -33,11 +33,11 @@ services:
       sqlserver:
         condition: service_healthy
 
-frontend:
-    image: nginx:alpine
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "8080:80"
-    volumes:
-      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+      - "5173:5173"
     depends_on:
       - api

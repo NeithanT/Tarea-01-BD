@@ -36,7 +36,7 @@ app.MapGet("/empleado", async () =>
     {
         using var connection = new SqlConnection(connectionString);
         var empleados = await connection.QueryAsync<Empleado>(
-            "ListarEmpleados",
+            "dbo.ListarEmpleados",
             commandType: CommandType.StoredProcedure
         );
         return Results.Ok(empleados);
@@ -60,7 +60,7 @@ app.MapPost("/empleado", async (EmpleadoDto empleadoDto) =>
         parameters.Add("@outResultado", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
         await connection.ExecuteAsync(
-            "InsertarEmpleado",
+            "dbo.InsertarEmpleado",
             parameters,
             commandType: CommandType.StoredProcedure
         );
