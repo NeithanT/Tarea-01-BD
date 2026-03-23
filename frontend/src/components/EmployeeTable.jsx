@@ -13,8 +13,8 @@ export default function EmployeeTable({ employees, setEmployees }) {
             {employees.map((employee) => (
                 <tr key={employee.id}>
                     <td>{employee.id}</td>
-                    <td>{employee.name}</td>
-                    <td>{employee.salary}</td>
+                    <td>{employee.nombre}</td>
+                    <td>{employee.salario}</td>
                 </tr>
             ))}
         </tbody>

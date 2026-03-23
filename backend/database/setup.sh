@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] setup.sh started - PID: $$" >> /var/opt/mssql/setup.log
+
 # Start SQL Server in the background
 /opt/mssql/bin/sqlservr &
 SQL_PID=$!
@@ -18,4 +20,5 @@ for i in {1..50}; do
     fi
 done
 
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] setup.sh completing - waiting for SQL Server process" >> /var/opt/mssql/setup.log
 wait $SQL_PID
