@@ -1,9 +1,23 @@
-import React from "react";
 
 export default function EmployeeTable({ employees, setEmployees }) {
   return (
-    <div>
-      <h2>tabla {employees.length}</h2>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Nombre</th>
+                <th>Salario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {employees.map((employee) => (
+                <tr key={employee.id}>
+                    <td>{employee.id}</td>
+                    <td>{employee.name}</td>
+                    <td>{employee.salary}</td>
+                </tr>
+            ))}
+        </tbody>
+    </table> 
   );
 }

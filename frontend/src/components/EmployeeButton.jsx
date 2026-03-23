@@ -1,10 +1,9 @@
-import React from "react";
 
-export default function EmployeeButton() {
+export default function EmployeeButton({ setCreatingEmployee }) {
 
     return (
-        <div>
-            <h3>boton</h3>
-        </div>
+        <button onClick={ () => setCreatingEmployee(true)}>
+            Agregar Empleado
+        </button>
     );
 }
