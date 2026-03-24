@@ -50,6 +50,7 @@ Root elements
 .employee-table th, .employee-table td {
   border: 2px solid #686868;
   padding: 8px;
+  width: 33.333%;
 }
 
 .employee-table th {
