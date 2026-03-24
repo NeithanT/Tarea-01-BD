@@ -1,7 +1,7 @@
 
-export default function EmployeeTable({ employees, setEmployees }) {
+export default function EmployeeTable({ employees}) {
   return (
-    <table>
+    <table className="employee-table">
         <thead>
             <tr>
                 <th>id</th>

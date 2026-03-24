@@ -22,9 +22,9 @@ export default function EmployeeScrollBar({ employees, setCurrentEmployees }) {
     }
 
     return (
-        <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid black' }}>
-            <button onClick={moveColumnLeft} disabled={currentColumn === 0}>Left</button>
-            <button onClick={moveColumnRight} disabled={employees.length <= currentColumn * 10 + 10}>Right</button>
+        <div className="employee-scrollbar">
+            <button onClick={moveColumnLeft} disabled={currentColumn === 0}></button>
+            <button onClick={moveColumnRight} disabled={employees.length <= currentColumn * 10 + 10}></button>
         </div>
     );
 }

@@ -9,21 +9,25 @@ function App() {
   const [currentEmployees, setCurrentEmployees] = useState([]);
   const [creatingEmployee, setCreatingEmployee] = useState(false);
 
-  useEffect(() => {
-    fetch("http://localhost:5154/empleado")
-      .then((response) => response.json())
-      .then((data) => {
-        const employeesArray = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        setEmployees(employeesArray);
-        console.log(employeesArray);
-      })
-      .catch((error) => {
-        console.error("Error fetching empleados:", error);
-      });
+  const loadEmployees = async () => {
+    try {
+      const response = await fetch("http://localhost:5154/empleado");
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const data = await response.json();
+      const employeesArray = Array.isArray(data)
+        ? data
+        : Object.keys(data).map((key) => ({ id: key, ...data[key] }));
+      setEmployees(employeesArray);
+      console.log("Empleados cargados:", employeesArray);
+    } catch (error) {
+      console.error("Error fetching empleados:", error);
+    }
+  };
 
+  useEffect(() => {
+    loadEmployees();
   }, []);
 
   return (
@@ -33,14 +37,14 @@ function App() {
       <h1>Gestor de Empleados</h1>
     </div>
     
-    <EmployeeTable employees={currentEmployees} setEmployees={setEmployees} />
+    <EmployeeTable employees={currentEmployees} allEmployees={employees} setCurrentEmployees={setCurrentEmployees}/>
 
     <EmployeeScrollBar employees={employees} setCurrentEmployees={setCurrentEmployees} />
 
     <EmployeeButton setCreatingEmployee={setCreatingEmployee} />
     
     {creatingEmployee && (
-      <EmployeeForm />
+      <EmployeeForm setCreatingEmployee={setCreatingEmployee} onReload={loadEmployees} />
     )}
 
     </>

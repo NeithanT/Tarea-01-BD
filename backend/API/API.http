@@ -2,3 +2,12 @@
 
 GET {{API_HostAddress}}/empleado
 ###
+
+POST {{API_HostAddress}}/empleado
+Content-Type: application/json
+
+{
+    "nombre": "Pepito",
+    "salario": 999999.9
+}
+###
