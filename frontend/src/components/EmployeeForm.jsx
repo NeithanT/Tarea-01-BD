@@ -46,26 +46,23 @@ export default function EmployeeForm({ setCreatingEmployee, onReload }) {
     };
 
     return (
-    <div className='employee-form'>
-        <form onSubmit={handleSubmit}>
-            <div className='row'>
-                <label htmlFor="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" />
-            </div>
-            
+        <div className="employee-form-overlay">
+            <form className='employee-form' onSubmit={handleSubmit}>
+                <div className='row'>
+                    <label htmlFor="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" />
+                </div>
 
-            <div className='row'>
-                <label htmlFor="salario">Salario:</label>
-                <input type="number" id="salario" name="salario" />
-            </div>
-            
-        </form>
+                <div className='row'>
+                    <label htmlFor="salario">Salario:</label>
+                    <input type="number" id="salario" name="salario" />
+                </div>
 
-        <div className='form-buttons'>
-            <button type="submit">Insertar</button>
-            <button type="button" onClick={() => setCreatingEmployee(false)}>Regresar</button>
+                <div className='form-buttons'>
+                    <button type="submit">Insertar</button>
+                    <button type="button" onClick={() => setCreatingEmployee(false)}>Regresar</button>
+                </div>
+            </form>
         </div>
-        
-    </div>
     );
 }

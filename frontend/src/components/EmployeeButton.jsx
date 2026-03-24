@@ -2,8 +2,8 @@
 export default function EmployeeButton({ setCreatingEmployee }) {
 
     return (
-        <button onClick={ () => setCreatingEmployee(true)}>
-            Agregar Empleado
+        <button className="employee-button" onClick={ () => setCreatingEmployee(true)}>
+            Insertar
         </button>
     );
 }

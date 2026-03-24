@@ -13,9 +13,6 @@ Root elements
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 18px;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,6 +35,9 @@ Root elements
 
 /* For EmployeeTable */
 
+.employee-table-container {
+  min-height: 520px;
+}
 
 .employee-table {
   margin: 20px auto;
@@ -46,72 +46,92 @@ Root elements
   max-width: 1400px;
   border: 3px solid #686868;
 }
+
 .employee-table th, .employee-table td {
-  border: 1px solid #686868;
+  border: 2px solid #686868;
   padding: 8px;
 }
+
 .employee-table th {
   background-color: #686868;
-  color: white;
 }
-.employee-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
+
 .employee-table tr:hover {
-  background-color: #ddd;
+  background-color: #302f2f;
 }
 
 button {
-  background: var(--two);
   background-color: #686868;
   border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
+  border-radius: 40%;
+  padding: 15px 15px;
   cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button:disabled {
-  background: #101010;
+button:disabled {  /*dissapear*/
+  background: transparent;
   cursor: not-allowed;
 }
+
 /* For EmployeeScrollBar */
+
 .employee-scrollbar {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  margin-top: 20px;
 }
 
 /* For EmployeeButton */
+
 .employee-button {
-  background: var(--two);
-  background-color: rgb(247, 89, 89);
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
+  margin-left: 15%;
+  width: 15%;
+  height: 50px;
+  background: #198754;
+  color: white;
+  border-radius: 6px;
 }
 
 /* For EmployeeForm */
+
+.employee-form-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .employee-form {
+  font-size: 30px;
+
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  background-color: #f9f9f9;
+  gap: 16px;
+  background-color: var(--bg);
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+  border-radius: 8px;
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
+  min-height: 400px;
 }
 
 .employee-form .row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: left;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  gap: 12px;
 }
 
 .employee-form input {
@@ -121,13 +141,22 @@ button:disabled {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+
+  /*must hide the arrows of the number input and only allow numbers */
+  appearance: none;
+  -moz-appearance: textfield;
+  
 }
 
 /* For buttons inside EmployeeForm */
+
 .form-buttons {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 200px;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 60px;
 }
 
 .form-buttons button {
