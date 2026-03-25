@@ -35,10 +35,16 @@ app.MapGet("/empleado", async () =>
     try
     {
         using var connection = new SqlConnection(connectionString);
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@outResultCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
         var empleados = await connection.QueryAsync<Empleado>(
             "dbo.ListarEmpleados",
+            parameters,
             commandType: CommandType.StoredProcedure
         );
+
         return Results.Ok(empleados);
     }
     catch (Exception ex)
@@ -57,7 +63,7 @@ app.MapPost("/empleado", async (EmpleadoDto empleadoDto) =>
         var parameters = new DynamicParameters();
         parameters.Add("@inNombre", empleadoDto.Nombre);
         parameters.Add("@inSalario", empleadoDto.Salario);
-        parameters.Add("@outResultado", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parameters.Add("@outResultCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
         await connection.ExecuteAsync(
             "dbo.InsertarEmpleado",
@@ -65,13 +71,13 @@ app.MapPost("/empleado", async (EmpleadoDto empleadoDto) =>
             commandType: CommandType.StoredProcedure
         );
 
-        var resultado = parameters.Get<int>("@outResultado");
+        var resultado = parameters.Get<int>("@outResultCode");
 
         if (resultado == 0) // codigo 200 de exito
         {
             return Results.Ok(new { mensaje = "Empleado insertado exitosamente" });
         }
-        else if (resultado == 1) // codigo 400 de error por nombre repetido
+        else if (resultado == 50001) // codigo 400 de error por nombre repetido
         {
             return Results.BadRequest(new { mensaje = "Nombre de Empleado ya existe." });
         }
