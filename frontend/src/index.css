@@ -177,3 +177,10 @@ button:disabled {  /*dissapear*/
   background: #6c757d;
   color: white;
 }
+
+.form-error {
+  color: #dc3545;
+  font-size: 18px;
+  margin: 0;
+  padding-left: 4px;
+}
