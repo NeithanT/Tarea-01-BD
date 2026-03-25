@@ -55,41 +55,112 @@ INSERT INTO dbo.Empleado (Nombre, Salario) VALUES ('Pablo Estrada', 215000.00);
 GO
 
 
-CREATE PROCEDURE ListarEmpleados
+CREATE TABLE dbo.DBErrors (
+    id            INT IDENTITY(1,1) PRIMARY KEY
+    ,ErrorNumber   INT
+    ,ErrorMessage  VARCHAR(4000)
+    ,ErrorSeverity INT
+    ,ErrorState    INT
+    ,ProcedureName VARCHAR(128)
+    ,ErrorLine     INT
+    ,CreatedAt     DATETIME DEFAULT GETDATE()
+);
+GO
+
+
+CREATE PROCEDURE dbo.ListarEmpleados
+    @outResultCode INT OUTPUT
 AS
 BEGIN
-    SELECT e.id, e.Nombre, e.Salario
-    FROM dbo.Empleado AS e
-    ORDER BY e.Nombre ASC;
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+
+        SELECT
+            e.id
+            ,e.Nombre
+            ,e.Salario
+        FROM dbo.Empleado AS e
+        ORDER BY e.Nombre ASC;
+
+        SET @outResultCode = 0;
+
+    END TRY
+    BEGIN CATCH
+
+        SET @outResultCode = 50001;
+
+        INSERT INTO dbo.DBErrors (
+            ErrorNumber
+            ,ErrorMessage
+            ,ErrorSeverity
+            ,ErrorState
+            ,ProcedureName
+            ,ErrorLine
+        )
+        VALUES (
+            ERROR_NUMBER()
+            ,ERROR_MESSAGE()
+            ,ERROR_SEVERITY()
+            ,ERROR_STATE()
+            ,'ListarEmpleados'
+            ,ERROR_LINE()
+        );
+
+    END CATCH
 END;
 GO
 
 
--- Este sp retorna:
--- 0 : se logro insertar
--- 1 : ya existe
--- 2 : error
-CREATE PROCEDURE InsertarEmpleado
-    @inNombre VARCHAR(128),
-    @inSalario MONEY,
-    @outResultado INT OUTPUT
+CREATE PROCEDURE dbo.InsertarEmpleado
+    @inNombre VARCHAR(128)
+    ,@inSalario MONEY
+    ,@outResultCode INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    IF EXISTS (SELECT 1 FROM dbo.Empleado AS e WHERE e.Nombre = @inNombre)
+
+    IF EXISTS (SELECT 1 FROM dbo.Empleado AS e WHERE (e.Nombre = @inNombre))
     BEGIN
-        SET @outResultado = 1; -- ya existe
+        SET @outResultCode = 50001; -- error: ya existe
         RETURN;
     END
 
     BEGIN TRY
-        INSERT INTO dbo.Empleado (Nombre, Salario)
-        VALUES (@inNombre, @inSalario);
-        SET @outResultado = 0; -- exito
+
+        INSERT INTO dbo.Empleado (
+            Nombre
+            ,Salario
+        )
+        VALUES (
+            @inNombre
+            ,@inSalario
+        );
+
+        SET @outResultCode = 0;
+
     END TRY
     BEGIN CATCH
-        SET @outResultado = 2; -- error
+
+        SET @outResultCode = 50002;
+
+        INSERT INTO dbo.DBErrors (
+            ErrorNumber
+            ,ErrorMessage
+            ,ErrorSeverity
+            ,ErrorState
+            ,ProcedureName
+            ,ErrorLine
+        )
+        VALUES (
+            ERROR_NUMBER()
+            ,ERROR_MESSAGE()
+            ,ERROR_SEVERITY()
+            ,ERROR_STATE()
+            ,'InsertarEmpleado'
+            ,ERROR_LINE()
+        );
+
     END CATCH
 END;
 GO
