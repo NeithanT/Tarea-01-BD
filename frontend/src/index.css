@@ -129,10 +129,16 @@ button:disabled {  /*dissapear*/
 .employee-form .row {
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  align-items: center;
   padding-top: 12px;
   padding-bottom: 12px;
   gap: 12px;
+}
+
+.employee-form .row label {
+  width: 160px;
+  min-width: 160px;
+  text-align: right;
 }
 
 .employee-form input {
