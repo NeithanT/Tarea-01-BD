@@ -11,7 +11,7 @@ services:
     volumes:
       - ./backend/database/init-db.sql:/usr/src/app/initdb.sql:ro
       - ./backend/database/setup.sh:/usr/src/app/setup.sh
-    entrypoint: /bin/bash /usr/src/app/setup.sh
+    entrypoint: ["/bin/bash", "/usr/src/app/setup.sh"]
     healthcheck:
       test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "127.0.0.1", "-U", "sa", "-P", "YourStrong1Pass", "-C", "-Q", "SELECT 1"]
       interval: 10s
@@ -33,11 +33,11 @@ services:
       sqlserver:
         condition: service_healthy
 
-frontend:
-    image: nginx:alpine
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "8080:80"
-    volumes:
-      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+      - "5173:5173"
     depends_on:
       - api

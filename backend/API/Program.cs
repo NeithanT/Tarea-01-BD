@@ -11,7 +11,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8080")
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8080", "http://25.32.168.107:5173", "http://25.32.168.107:3000", "http://25.32.168.107:8080")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -36,7 +36,7 @@ app.MapGet("/empleado", async () =>
     {
         using var connection = new SqlConnection(connectionString);
         var empleados = await connection.QueryAsync<Empleado>(
-            "SP_ListarEmpleados",
+            "dbo.ListarEmpleados",
             commandType: CommandType.StoredProcedure
         );
         return Results.Ok(empleados);
@@ -55,17 +55,17 @@ app.MapPost("/empleado", async (EmpleadoDto empleadoDto) =>
         using var connection = new SqlConnection(connectionString);
 
         var parameters = new DynamicParameters();
-        parameters.Add("@Nombre", empleadoDto.Nombre);
-        parameters.Add("@Salario", empleadoDto.Salario);
-        parameters.Add("@Resultado", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        parameters.Add("@inNombre", empleadoDto.Nombre);
+        parameters.Add("@inSalario", empleadoDto.Salario);
+        parameters.Add("@outResultado", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
         await connection.ExecuteAsync(
-            "SP_InsertarEmpleado",
+            "dbo.InsertarEmpleado",
             parameters,
             commandType: CommandType.StoredProcedure
         );
 
-        var resultado = parameters.Get<int>("@Resultado");
+        var resultado = parameters.Get<int>("@outResultado");
 
         if (resultado == 0) // codigo 200 de exito
         {
