@@ -15,7 +15,7 @@ export default function EmployeeTable({ employees}) {
             <tr key={employee.id}>
               <td>{employee.id}</td>
               <td>{employee.nombre}</td>
-              <td>{employee.salario}</td>
+              <td>₡{Number(employee.salario).toLocaleString('fr-FR', { maximumFractionDigits: 0 })}</td>
             </tr>
           ))}
         </tbody>
