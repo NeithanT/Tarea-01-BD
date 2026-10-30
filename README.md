@@ -1,78 +1,39 @@
+# Tarea 01 - Gestor de Empleados
 
+Aplicación para consultar y registrar empleados en una base de datos.
 
-instalarse SDK .NET(dotnet), docker, nodejs
+## Componentes del Proyecto
 
-Comandos:
+- **Base de Datos:** SQL Server 2022 con una tabla de empleados y procedimientos almacenados para consultar e insertar registros.
+- **Backend:** API en .NET que se conecta a la base de datos y provee las rutas para obtener y guardar empleados.
+- **Frontend:** Interfaz web en React que muestra la lista de empleados y un formulario para registrar nuevos.
 
-Para el BackEnd
+## Estructura
 
-Vamos a usar azure, para hacer facil las cosas,
+- `backend/`: Contiene el proyecto de la API en .NET y los scripts SQL de inicialización.
+- `frontend/`: Contiene el código de la aplicación web en React.
+- `docker-compose.yml`: Configuración para levantar la base de datos, el backend y el frontend al mismo tiempo.
 
-docker tambien seria una opcion:
+## Cómo Ejecutar
 
-Primero, tener la imagen de docker, esto es como instalarse el sql server express
--	docker pull mcr.microsoft.com/mssql/server:2022-latest
+La forma recomendada de correr el proyecto es mediante Docker Compose:
 
-Ejecutar la base de datos sin nada:
--	docker run -e "ACCEPT_EULA=Y"     -e "MSSQL_SA_PASSWORD=YourStrong(!)Pass"       -p 1433:1433            --name sqlserver2022            -d mcr.microsoft.com/mssql/server:2022-latest
+1. Ejecutar en la terminal desde la raíz del proyecto:
+   ```bash
+   docker compose up --build
+   ```
 
-"Esto crea un contenedor con esa sqlserver, y tiene el nombre de sqlserver2022"
+2. Acceder a los servicios:
+   - Frontend: http://localhost:5173
+   - API: http://localhost:5154/empleado
 
-Pueden ver los contenedores activos con:
--	docker ps -a
+## Rutas de la API
 
-Entonces para detenerlo o borrar la instancia se puede:
--	docker stop sqlserver2022
--	docker rm sqlserver2022
-
-Ejecutarla con Volumes/Bind Mounts(Que se guarden los datos entre sesiones)
-Primero se creo, el volume(un espacio en su compu):
--	cd backend/database
--	docker volume create sqlservervol
--	docker volume ls "Ver los volumen"
-
-Ahorra correr sqlserver
--	docker run -e "ACCEPT_EULA=Y"            -p 1433:1433            --name sqlserver2022            -d             --mount source=sqlservervol,target=/var/lib/sqlserver mcr.microsoft.com/mssql/server:2022-latest
-
-Ahora cosas para la DB:
-
-Se necesita usar ya sea SMSS(Studio Managment Sql Server)
-o la extension de sql server de vscode
-y conectarse a la base de datos con la contra y el port de antes
-
-Algunas cosas de sql:
-
-CREATE DATABASE users;
-USE users;
-CREATE TABLE test_table (
-
-somevalue VARCHAR(50)
-
-);
-INSERT INTO test_table (somevalue) VALUES ('Test Insert');
-COMMIT;
-SELECT somevalue FROM test_table;
-
-Para dotnet o .NET:
-
-estos son algunos comandos:
-
--	dotnet new webapi -o backend "Crear el proyecto"
--	dotnet dev-certs https --trust "Confiar en los certificados"
--	dotnet run watch "Ejecutar la weada en port 5154"
-
-para ver la API, ir al puerto en su navegador(google)
-http://localhost:puerto
-
-Para el Frontend
-
-Necesitamos nodejs, nodejs es un runtime(el programa que lo ejecuta) del lenguaje javaScript
-
-nodejs tiene un packet manager, osea una appstore para librerias, que se llama npm
-
-- npm create vite@latest my-react-app -- --template react
-- cd my-react-app
-- npm install
-- npm run dev
-
-http://localhost:puerto
+- `GET /empleado`: Retorna la lista de empleados registrados.
+- `POST /empleado`: Registra un empleado nuevo enviando en formato JSON:
+  ```json
+  {
+    "nombre": "Nombre Apellido",
+    "salario": 250000.00
+  }
+  ```
