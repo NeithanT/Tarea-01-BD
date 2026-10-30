@@ -1,78 +1,63 @@
+# Gestor de Empleados - Tarea 01 (BD)
 
+Sistema full-stack para la consulta y registro de empleados, implementado con una arquitectura desacoplada utilizando **React**, **ASP.NET Core** y **SQL Server**, todo orquestado mediante **Docker Compose**.
 
-instalarse SDK .NET(dotnet), docker, nodejs
+---
 
-Comandos:
+## 🛠️ Tecnologías
 
-Para el BackEnd
+- **Frontend:** React (Vite)
+- **Backend:** .NET 9 (ASP.NET Core Minimal API + Dapper)
+- **Base de Datos:** Microsoft SQL Server 2022 (con procedimientos almacenados)
+- **Despliegue/Contenedores:** Docker & Docker Compose
 
-Vamos a usar azure, para hacer facil las cosas,
+---
 
-docker tambien seria una opcion:
+## 📁 Estructura del Repositorio
 
-Primero, tener la imagen de docker, esto es como instalarse el sql server express
--	docker pull mcr.microsoft.com/mssql/server:2022-latest
+- `backend/`
+  - `API/`: Código fuente de la API REST en .NET.
+  - `database/`: Scripts de inicialización de la base de datos (`init-db.sql`, `setup.sh`) con la tabla `Empleado`, procedimientos almacenados y datos iniciales.
+- `frontend/`: Interfaz de usuario en React para visualización y registro de empleados.
+- `docker-compose.yml`: Archivo de orquestación para levantar automáticamente la BD, API y Frontend.
 
-Ejecutar la base de datos sin nada:
--	docker run -e "ACCEPT_EULA=Y"     -e "MSSQL_SA_PASSWORD=YourStrong(!)Pass"       -p 1433:1433            --name sqlserver2022            -d mcr.microsoft.com/mssql/server:2022-latest
+---
 
-"Esto crea un contenedor con esa sqlserver, y tiene el nombre de sqlserver2022"
+## 🚀 Inicio Rápido (Recomendado)
 
-Pueden ver los contenedores activos con:
--	docker ps -a
+Teniendo instalado **Docker** y **Docker Compose**:
 
-Entonces para detenerlo o borrar la instancia se puede:
--	docker stop sqlserver2022
--	docker rm sqlserver2022
+1. Levantar todos los servicios:
+   ```bash
+   docker compose up --build
+   ```
 
-Ejecutarla con Volumes/Bind Mounts(Que se guarden los datos entre sesiones)
-Primero se creo, el volume(un espacio en su compu):
--	cd backend/database
--	docker volume create sqlservervol
--	docker volume ls "Ver los volumen"
+2. Acceder a los servicios:
+   - **Frontend:** [http://localhost:5173](http://localhost:5173)
+   - **API Backend:** [http://localhost:5154/empleado](http://localhost:5154/empleado)
+   - **SQL Server:** Puerto `1433` (Usuario: `sa`, Contraseña: `YourStrong1Pass`)
 
-Ahorra correr sqlserver
--	docker run -e "ACCEPT_EULA=Y"            -p 1433:1433            --name sqlserver2022            -d             --mount source=sqlservervol,target=/var/lib/sqlserver mcr.microsoft.com/mssql/server:2022-latest
+---
 
-Ahora cosas para la DB:
+## 🔌 Endpoints de la API
 
-Se necesita usar ya sea SMSS(Studio Managment Sql Server)
-o la extension de sql server de vscode
-y conectarse a la base de datos con la contra y el port de antes
+| Método | Endpoint | Descripción | Body (JSON) |
+|---|---|---|---|
+| `GET` | `/empleado` | Retorna la lista de empleados | N/A |
+| `POST` | `/empleado` | Inserta un nuevo empleado | `{ "nombre": "Nombre Apellido", "salario": 250000.00 }` |
 
-Algunas cosas de sql:
+---
 
-CREATE DATABASE users;
-USE users;
-CREATE TABLE test_table (
+## 💻 Ejecución Local (Sin Docker)
 
-somevalue VARCHAR(50)
-
-);
-INSERT INTO test_table (somevalue) VALUES ('Test Insert');
-COMMIT;
-SELECT somevalue FROM test_table;
-
-Para dotnet o .NET:
-
-estos son algunos comandos:
-
--	dotnet new webapi -o backend "Crear el proyecto"
--	dotnet dev-certs https --trust "Confiar en los certificados"
--	dotnet run watch "Ejecutar la weada en port 5154"
-
-para ver la API, ir al puerto en su navegador(google)
-http://localhost:puerto
-
-Para el Frontend
-
-Necesitamos nodejs, nodejs es un runtime(el programa que lo ejecuta) del lenguaje javaScript
-
-nodejs tiene un packet manager, osea una appstore para librerias, que se llama npm
-
-- npm create vite@latest my-react-app -- --template react
-- cd my-react-app
-- npm install
-- npm run dev
-
-http://localhost:puerto
+- **Backend:**
+  ```bash
+  cd backend/API
+  dotnet run
+  ```
+- **Frontend:**
+  ```bash
+  cd frontend
+  npm install
+  npm run dev
+  ```
